@@ -36,6 +36,8 @@ def load_checkpoint(path):
     dist.barrier()
     checkpoint = t.load(restore, map_location=t.device('cpu'))
     print("Restored from {}".format(restore))
+    import gc
+    gc.collect()
     return checkpoint
 
 def save_checkpoint(logger, name, model, opt, metrics, hps):

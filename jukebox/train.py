@@ -10,6 +10,7 @@ import numpy as np
 import torch as t
 import jukebox.utils.dist_adapter as dist
 from torch.nn.parallel import DistributedDataParallel
+from termcolor import colored
 
 from jukebox.hparams import setup_hparams
 from jukebox.make_models import make_vqvae, make_prior, restore_opt, save_checkpoint
@@ -27,7 +28,6 @@ def prepare_aud(x, hps):
 
 def log_aud(logger, tag, x, hps):
     logger.add_audios(tag, prepare_aud(x, hps), hps.sr, max_len=hps.max_len, max_log=hps.max_log)
-    logger.flush()
 
 def log_labels(logger, labeller, tag, y, hps):
     y = y.cpu().numpy()
@@ -37,7 +37,6 @@ def log_labels(logger, labeller, tag, y, hps):
         artist, genre, lyrics = description['artist'], description['genre'], description['lyrics']
         txt += f'{item} artist:{artist}, genre:{genre}, lyrics:{lyrics}\n'
     logger.add_text(tag, txt)
-    logger.flush()
 
 def get_ddp(model, hps):
     rank = dist.get_rank()
@@ -113,7 +112,6 @@ def log_inputs(orig_model, logger, x_in, y, x_out, hps, tag="train"):
         x_ds = [orig_model.decode(zs_in[level:], start_level=level, bs_chunks=bs) for level in range(0, hps.levels)]
         for i in range(len(x_ds)):
             log_aud(logger, f'{tag}_x_ds_start_{i}', x_ds[i], hps)
-    logger.flush()
 
 def sample_prior(orig_model, ema, logger, x_in, y, hps):
     if ema is not None: ema.swap()
@@ -148,7 +146,6 @@ def sample_prior(orig_model, ema, logger, x_in, y, hps):
         log_aud(logger, f'x_ds_start_{i}', x_ds[i], hps)
     orig_model.train()
     if ema is not None: ema.swap()
-    logger.flush()
 
 def evaluate(model, orig_model, logger, metrics, data_processor, hps):
     model.eval()
@@ -191,6 +188,7 @@ def evaluate(model, orig_model, logger, metrics, data_processor, hps):
             with t.no_grad():
                 if log_input_output:
                     log_inputs(orig_model, logger, x_in, y, x_out, hps)
+                    print(colored("steps:" + str(logger.iters),"magenta"))
 
             logger.set_postfix(**{print_key:_metrics[key] for print_key, key in _print_keys.items()})
 
@@ -269,20 +267,23 @@ def train(model, orig_model, opt, shd, scalar, ema, logger, metrics, data_proces
                 orig_model.eval()
                 name = 'latest' if hps.prior else f'step_{logger.iters}'
                 if dist.get_rank() % 8 == 0:
+                    print(f"!!! WARNING: Saving checkpoint at iteration {logger.iters} DO NOT QUIT !!!")
                     save_checkpoint(logger, name, orig_model, opt, dict(step=logger.iters), hps)
                 orig_model.train()
                 if ema is not None: ema.swap()
 
         # Sample
         with t.no_grad():
-            if (logger.iters % 12000) in list(range(1, 1 + hps.iters_before_update)) or finished_training:
-                if hps.prior:
-                    sample_prior(orig_model, ema, logger, x_in, y, hps)
+            if hps.sample_at_intervals:
+                if (logger.iters % 12000) in list(range(1, 1 + hps.iters_before_update)) or finished_training:
+                    if hps.prior:
+                        sample_prior(orig_model, ema, logger, x_in, y, hps)
 
         # Input/Output
         with t.no_grad():
             if log_input_output:
                 log_inputs(orig_model, logger, x_in, y, x_out, hps)
+                print(colored("steps:" + str(logger.iters),"magenta"))
 
         logger.set_postfix(**{print_key:_metrics[key] for print_key, key in _print_keys.items()})
         if finished_training:

@@ -1,4 +1,5 @@
 import librosa
+import os
 import math
 import numpy as np
 import jukebox.utils.dist_adapter as dist
@@ -65,17 +66,18 @@ class FilesAudioDataset(Dataset):
         return index, offset
 
     def get_metadata(self, filename, test):
-        """
-        Insert metadata loading code for your dataset here.
-        If artist/genre labels are different from provided artist/genre lists,
-        update labeller accordingly.
+        lyr = ""
+        letx = filename.replace('.wav','.txt').replace('.mp3','.txt')
+        if os.path.isfile(letx):
+          fin = open(letx, "rt")
+          try:
+              lyr = fin.read()
+          except:
+              print('...has invalid characters in lyrics, skipping')
+          finally:
+              fin.close()
 
-        Returns:
-            (artist, genre, full_lyrics) of type (str, str, str). For
-            example, ("unknown", "classical", "") could be a metadata for a
-            piano piece.
-        """
-        return None, None, None
+        return "unknown", "unknown", lyr
 
     def get_song_chunk(self, index, offset, test=False):
         filename, total_length = self.files[index], self.durations[index]
