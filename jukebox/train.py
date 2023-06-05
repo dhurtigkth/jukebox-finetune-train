@@ -269,15 +269,15 @@ def train(model, orig_model, opt, shd, scalar, ema, logger, metrics, data_proces
                 if dist.get_rank() % 8 == 0:
                     print(f"!!! WARNING: Saving checkpoint at iteration {logger.iters} DO NOT QUIT !!!")
                     save_checkpoint(logger, name, orig_model, opt, dict(step=logger.iters), hps)
+                    print(f"!!! DONE: saving checkpoint")
                 orig_model.train()
                 if ema is not None: ema.swap()
 
         # Sample
         with t.no_grad():
-            if hps.sample_at_intervals:
-                if (logger.iters % 12000) in list(range(1, 1 + hps.iters_before_update)) or finished_training:
-                    if hps.prior:
-                        sample_prior(orig_model, ema, logger, x_in, y, hps)
+            if (logger.iters % 12000) in list(range(1, 1 + hps.iters_before_update)) or finished_training:
+                if hps.prior:
+                    sample_prior(orig_model, ema, logger, x_in, y, hps)
 
         # Input/Output
         with t.no_grad():
