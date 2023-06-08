@@ -267,9 +267,9 @@ def train(model, orig_model, opt, shd, scalar, ema, logger, metrics, data_proces
                 orig_model.eval()
                 name = 'latest' if hps.prior else f'step_{logger.iters}'
                 if dist.get_rank() % 8 == 0:
-                    print(f"!!! WARNING: Saving checkpoint at iteration {logger.iters} DO NOT QUIT !!!")
+                    print(f"\n!!! WARNING: Saving checkpoint at iteration {logger.iters} DO NOT QUIT !!!")
                     save_checkpoint(logger, name, orig_model, opt, dict(step=logger.iters), hps)
-                    print(f"!!! DONE: saving checkpoint")
+                    print(f"\n!!! DONE: saving checkpoint")
                 orig_model.train()
                 if ema is not None: ema.swap()
 
