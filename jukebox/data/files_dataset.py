@@ -66,17 +66,12 @@ class FilesAudioDataset(Dataset):
         return index, offset
 
     def get_metadata(self, filename, test):
-        lyr = ""
-        letx = filename.replace('.wav','.txt').replace('.mp3','.txt')
-        if os.path.isfile(letx):
-          fin = open(letx, "rt")
-          try:
-              lyr = fin.read()
-          except:
-              print('...has invalid characters in lyrics, skipping')
-          finally:
-              fin.close()
+        file_path = '/content/drive/My Drive/data_project' + filename + ".txt"
+        print(file_path)
 
+        with open(file_path, 'r') as file:
+            lyr = file.read()
+        print(lyr)
         return "unknown", "unknown", lyr
 
     def get_song_chunk(self, index, offset, test=False):
