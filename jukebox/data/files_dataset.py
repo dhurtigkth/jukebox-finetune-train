@@ -69,7 +69,7 @@ class FilesAudioDataset(Dataset):
 
     def get_metadata(self, filename, test):
         print("file name: ", filename)
-        file_path = '/content/drive/My Drive/Project Jukebox/Audiobook Data/data_project_small/' + filename + ".txt"
+        file_path = '/content/drive/My Drive/Project Jukebox/Audiobook Data/data_project_small/' + filename + ".gdoc"
        
         print("file_path: ", file_path)
 
