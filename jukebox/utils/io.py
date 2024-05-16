@@ -47,7 +47,7 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
         if resample:
             print("pre-resampling: ", frame)
             frame.pts = None
-            frame = resampler.resample(frame)
+            frame = resampler.resample(frame)[0]
             print("resampled: ", frame)
         
         print("frame: ", frame)
