@@ -324,6 +324,7 @@ class SimplePrior(nn.Module):
         x_cond, y_cond, prime = self.get_cond(z_conds, y)
         if self.copy_input:
             prime = z[:,:self.n_tokens]
+            print("Prime updated: ", prime)
         if self.single_enc_dec:
             print("prime: ", prime)
             z, x_cond = self.prior_preprocess([prime, z], [None, x_cond])
