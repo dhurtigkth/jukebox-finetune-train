@@ -69,11 +69,9 @@ class FilesAudioDataset(Dataset):
 
     def get_metadata(self, filename, test):
         print("file name: ", filename)
-        file_path = '/content/drive/My Drive/Project Jukebox/Audiobook Data/data_project_small' + filename + ".gdoc"
-       
-        print("file_path: ", file_path)
-
-        with open(file_path, 'r') as file:
+        lyric_path = filename.split(".wav")[0] + ".gdoc"
+        print("lyric_path: ", lyric_path)
+        with open(filename, 'r') as file:
             lyr = file.read()
         print("lyrics: ", lyr)
         return "unknown", "unknown", lyr
