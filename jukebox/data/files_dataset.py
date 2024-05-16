@@ -66,12 +66,14 @@ class FilesAudioDataset(Dataset):
         return index, offset
 
     def get_metadata(self, filename, test):
-        file_path = '/content/drive/My Drive/data_project' + filename + ".txt"
-        print(file_path)
+        print("file name: ", filename)
+        file_path = '/content/drive/My Drive/Project Jukebox/Audiobook Data/data_project_small/' + filename + ".txt"
+       
+        print("file_path: ", file_path)
 
         with open(file_path, 'r') as file:
             lyr = file.read()
-        print(lyr)
+        print("lyrics: ", lyr)
         return "unknown", "unknown", lyr
 
     def get_song_chunk(self, index, offset, test=False):
