@@ -71,10 +71,26 @@ class FilesAudioDataset(Dataset):
         print("file name: ", filename)
         lyric_path = filename.split(".wav")[0] + ".txt"
         print("lyric_path: ", lyric_path)
-        with open(filename, 'r', encoding="ISO-8859-1") as file:
-            lyr = file.read()
-        print("lyrics: ", lyr)
-        return "unknown", "unknown", lyr
+        try:
+            with open(filename, 'r', encoding="ISO-8859-1") as file:
+                lyr = file.read()
+                return "unknown", "unknown", lyr
+                print("lyrics: ", lyr)
+        except Exception as e:
+            print(e)
+            return None
+        #return "unknown", "unknown", lyr
+
+
+        try:
+        with open(file_path, 'r', encoding=’ISO-8859-1’) as file:
+            content = file.read()
+            print(f"Successfully read {file_path}: {content[:100]}...")         
+            return content
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return None
+
 
     def get_song_chunk(self, index, offset, test=False):
         filename, total_length = self.files[index], self.durations[index]
