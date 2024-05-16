@@ -21,8 +21,10 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
     if time_base == 'sec':
         offset = offset * sr
         duration = duration * sr
+    print(file)
     # Loads at target sr, stereo channels, seeks from offset, and stops after duration
     container = av.open(file)
+    print(container)
     audio = container.streams.get(audio=0)[0] # Only first audio stream
     audio_duration = audio.duration * float(audio.time_base)
     if approx:
