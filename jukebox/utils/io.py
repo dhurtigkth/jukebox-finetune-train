@@ -47,7 +47,8 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
             frame.pts = None
             frame = resampler.resample(frame)
         
-        frame = frame.to_ndarray(format='fltp') # Convert to floats and not int16
+        frame = np.array(frame).astype(float)
+        #frame = frame.to_ndarray(format='fltp') # Convert to floats and not int16
         read = frame.shape[-1]
         if total_read + read > duration:
             read = duration - total_read
