@@ -44,7 +44,7 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
     for frame in container.decode(audio=0): # Only first audio stream
         if resample:
             frame.pts = None
-            frame = resampler.resample(frame)
+            #frame = resampler.resample(frame)
         
         #frame = np.array(frame)
         print(frame)
