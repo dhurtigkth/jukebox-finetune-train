@@ -69,7 +69,7 @@ class FilesAudioDataset(Dataset):
 
     def get_metadata(self, filename, test):
         print("file name: ", filename)
-        lyric_path = filename.split(".wav")[0] + ".gdoc"
+        lyric_path = filename.split(".wav")[0] + ".txt"
         print("lyric_path: ", lyric_path)
         with open(filename, 'r') as file:
             lyr = file.read()
