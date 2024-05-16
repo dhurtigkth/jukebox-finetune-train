@@ -42,8 +42,8 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
     container.seek(offset, stream=audio)
     total_read = 0
     for frame in container.decode(audio=0): # Only first audio stream
-        print(frame)
         if resample:
+            print("frame: ", frame)
             frame.pts = None
             frame = resampler.resample(frame)
         
