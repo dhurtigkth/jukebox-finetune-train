@@ -317,17 +317,17 @@ class SimplePrior(nn.Module):
                 set of layer indices indicating which layers to store, or a
                 boolean value indicating whether to dump all.
         """
-        print("Z: ", z)
-        print("copy input: ", self.copy_input)
+        #print("Z: ", z)
+        #print("copy input: ", self.copy_input)
         assert isinstance(get_attn_weights, (bool, set))
         if get_attn_weights:
             self.prior.transformer.set_record_attn(get_attn_weights)
         x_cond, y_cond, prime = self.get_cond(z_conds, y)
         if self.copy_input:
             prime = z[:,:self.n_tokens]
-            print("Prime updated: ", prime)
+            #print("Prime updated: ", prime)
         if self.single_enc_dec:
-            print("prime: ", prime)
+            #print("prime: ", prime)
             z, x_cond = self.prior_preprocess([prime, z], [None, x_cond])
             (prime_loss, gen_loss), preds = self.prior(z, x_cond, y_cond, fp16=fp16, get_sep_loss=True, get_preds=get_preds)
         else:
