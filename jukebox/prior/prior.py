@@ -318,6 +318,7 @@ class SimplePrior(nn.Module):
                 boolean value indicating whether to dump all.
         """
         print("Z: ", z)
+        print("copy input: ", self.copy_input)
         assert isinstance(get_attn_weights, (bool, set))
         if get_attn_weights:
             self.prior.transformer.set_record_attn(get_attn_weights)
