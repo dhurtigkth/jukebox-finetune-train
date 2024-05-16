@@ -72,7 +72,7 @@ class FilesAudioDataset(Dataset):
         lyric_path = filename.split(".wav")[0] + ".txt"
         print("lyric_path: ", lyric_path)
         try:
-            with open(filename, 'r', encoding="ISO-8859-1") as file:
+            with open(filename, 'r', encoding="utf-16") as file:
                 lyr = file.read()
                 return "unknown", "unknown", lyr
                 print("lyrics: ", lyr)
