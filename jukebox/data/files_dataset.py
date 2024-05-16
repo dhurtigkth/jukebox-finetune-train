@@ -53,6 +53,7 @@ class FilesAudioDataset(Dataset):
         shift = np.random.randint(-half_interval, half_interval) if self.aug_shift else 0
         offset = item * self.sample_length + shift # Note we centred shifts, so adding now
         midpoint = offset + half_interval
+        print("self: ", self)
         assert 0 <= midpoint < self.cumsum[-1], f'Midpoint {midpoint} of item beyond total length {self.cumsum[-1]}'
         index = np.searchsorted(self.cumsum, midpoint)  # index <-> midpoint of interval lies in this song
         start, end = self.cumsum[index - 1] if index > 0 else 0.0, self.cumsum[index] # start and end of current song
