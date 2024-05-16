@@ -45,12 +45,12 @@ def load_audio(file, sr, offset, duration, resample=True, approx=False, time_bas
     total_read = 0
     for frame in container.decode(audio=0): # Only first audio stream
         if resample:
-            print("pre-resampling: ", frame)
+            #print("pre-resampling: ", frame)
             frame.pts = None
             frame = resampler.resample(frame)[0]
-            print("resampled: ", frame)
+            #print("resampled: ", frame)
         
-        print("frame: ", frame)
+        #print("frame: ", frame)
         frame = frame.to_ndarray(format='fltp') # Convert to floats and not int16
         read = frame.shape[-1]
         if total_read + read > duration:
