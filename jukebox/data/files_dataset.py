@@ -74,8 +74,8 @@ class FilesAudioDataset(Dataset):
         try:
             with open(filename, 'r', encoding="utf-16") as file:
                 lyr = file.read()
-                return "unknown", "unknown", lyr
                 print("lyrics: ", lyr)
+                return "unknown", "unknown", lyr
         except Exception as e:
             print(e)
             return None
