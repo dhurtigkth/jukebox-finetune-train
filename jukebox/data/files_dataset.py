@@ -8,6 +8,8 @@ from jukebox.utils.dist_utils import print_all
 from jukebox.utils.io import get_duration_sec, load_audio
 from jukebox.data.labels import Labeller
 
+import gzip
+
 class FilesAudioDataset(Dataset):
     def __init__(self, hps):
         super().__init__()
@@ -68,18 +70,18 @@ class FilesAudioDataset(Dataset):
         return index, offset
 
     def get_metadata(self, filename, test):
-        #print("file name: ", filename)
-        lyric_path = filename.split(".wav")[0] + ".txt"
-        #print("lyric_path: ", lyric_path)
-        with open(filename, 'r', encoding="utf-32") as file:
+
+        #lyric_path = filename.split(".wav")[0] + ".txt"
+        lyric_path = filename.split(".wav")[0] + ".gz"
+
+        #with open(filename, 'r', encoding="utf-32") as file:
+        #    lyr = file.read()
+        #    print("lyrics: ", lyr)
+
+
+        with gzip.open(lyric_path, 'rt', encoding='utf-8') as file:
             lyr = file.read()
-            print("lyrics: ", lyr)
-
-        import gzip
-
-        with gzip.open(file+".gz", 'rt', encoding='utf-8') as file:
-            text = file.read()
-        if text is not None:
+        if lyr is not None:
             print(f"{text}")    
         return "unknown", "unknown", lyr
         #return "unknown", "unknown", lyr
