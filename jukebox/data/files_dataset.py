@@ -74,6 +74,13 @@ class FilesAudioDataset(Dataset):
         with open(filename, 'r', encoding="utf-32") as file:
             lyr = file.read()
             print("lyrics: ", lyr)
+
+        import gzip
+
+        with gzip.open(file+".gz", 'rt', encoding='utf-8') as file:
+            text = file.read()
+        if text is not None:
+            print(f"{text}")    
         return "unknown", "unknown", lyr
         #return "unknown", "unknown", lyr
 
