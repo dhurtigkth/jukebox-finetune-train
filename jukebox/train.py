@@ -3,6 +3,7 @@ Ability to train vq-vae and prior
 First try for random inputs
 Then from maestros
 """
+print("imports..")
 import sys
 import fire
 import warnings
@@ -344,4 +345,5 @@ def run(hps="teeny", port=29500, **kwargs):
         dist.barrier()
 
 if __name__ == '__main__':
+    print("main..")
     fire.Fire(run)
