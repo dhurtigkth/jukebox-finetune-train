@@ -22,6 +22,7 @@ class FilesAudioDataset(Dataset):
         self.aug_shift = hps.aug_shift
         self.labels = hps.labels
         self.init_dataset(hps)
+        # 
 
     def filter(self, files, durations):
         # Remove files too short or too long
