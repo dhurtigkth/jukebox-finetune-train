@@ -562,6 +562,35 @@ DEFAULTS["audio"] = Hyperparams(
     multispec_loss_window_size=(1200,600,240),
 )
 
+my_retrained_prior = Hyperparams(
+    n_ctx=6144,    # original: 6144, ours: 384
+    prior_width=1024,
+    prior_depth=48,
+    heads=2,
+    attn_order=12,
+    blocks=64,
+    init_scale=0.7,
+    c_res=1,
+    prime_loss_fraction=0.4,
+    single_enc_dec=True,
+    labels=True,
+    labels_v3=True,
+    y_bins=(10,100), # Set this to (genres, artists) for your dataset
+    max_bow_genre_size=1,
+    min_duration=24.0,    # 24
+    max_duration=600.0,    # 600
+    t_bins=64,      # original: 64, ours: 16
+    use_tokens=True,
+    n_tokens=384,    # original: 384, ours: 24
+    n_vocab=79,
+    restore_prior='/content/drive/MyDrive/Project Jukebox/checkpoint_latest_1.pth.tar',
+    level=2,
+    # TODO For the two lines below, if `--labels` was used and the model is
+    # trained with lyrics, find and enter the layer, head pair that has learned
+    # alignment.
+    alignment_layer=47,
+    alignment_head=0,)
+
 DEFAULTS["distributed"] = Hyperparams(
     bucket=128
 )
